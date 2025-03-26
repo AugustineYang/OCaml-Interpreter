@@ -17,3 +17,8 @@ To execute the interpreter, use the following command:
 ```
 dune exec interpreter_project
 ```
+
+## References
+
+- Pierce, B. C. (2002). *Types and Programming Languages*. MIT Press.  
+- Clarkson, M. R. (2021–2025). [OCaml Programming: Correct + Efficient + Beautiful](https://cs3110.github.io/textbook/)

@@ -6,8 +6,6 @@
 %token PLUS MINUS TIMES DIV EOF
 %token LPAREN RPAREN
 
-(*Left associated, and also the order that TIMES DIV is behind
-PLUS MINUS means that TIMES and DIV have higher precedence.*)
 %left PLUS MINUS
 %left TIMES DIV
 

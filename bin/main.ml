@@ -1,4 +1,4 @@
-open Mathlib
+open Interpreterlib
 open Ast
 
 let rec string_of_expr (e : expr) : string = 
@@ -80,7 +80,8 @@ let interp_big (s : string) : string =
   s |> parse |> eval_big |> string_of_expr
   
 let () =
-  let filename = "test/math_test2.in" in
+  let filename = "test/simpl_test1.in" in
+  (* let filename = "test/simpl_test2.in" in *)
   let in_channel = open_in filename in
   let file_content = really_input_string in_channel (in_channel_length in_channel) in
   close_in in_channel;

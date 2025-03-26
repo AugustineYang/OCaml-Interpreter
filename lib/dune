@@ -1,5 +1,5 @@
 (library
- (name mathlib)
+ (name interpreterlib)
  (modules parser lexer ast))
 
 (ocamllex lexer)

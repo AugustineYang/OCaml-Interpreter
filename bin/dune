@@ -2,5 +2,5 @@
  (public_name interpreter_project)
  (name main)
  (modules main)
- (libraries mathlib)
+ (libraries interpreterlib)
  (flags (:standard -w -32-27-26-39)))

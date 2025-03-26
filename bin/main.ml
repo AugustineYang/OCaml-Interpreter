@@ -86,11 +86,11 @@ let () =
   let file_content = really_input_string in_channel (in_channel_length in_channel) in
   close_in in_channel;
 
-  let res = interp file_content in
+  (* let res = interp file_content in
   Printf.printf "Result of interpreting %s:\n%s\n\n" filename res;
 
   let res = interp_big file_content in
-  Printf.printf "Result of interpreting %s with big-step model:\n%s\n\n" filename res;
+  Printf.printf "Result of interpreting %s with big-step model:\n%s\n\n" filename res; *)
 
   let ast = parse file_content in 
   Printf.printf "AST: %s\n" (string_of_expr ast);

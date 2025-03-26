@@ -45,12 +45,12 @@ let rec step : expr -> expr = function
 (* implement the primitive operation [v1 binop v2].
    Requires: [v1] and [v2] are both values. *)
 and step_binop binop v1 v2 = match binop, v1, v2 with
-| Add, Int a, Int b -> Int (a + b)
-| Sub, Int a, Int b -> Int (a - b)
-| Mul, Int a, Int b -> Int (a * b)
-| Div, Int a, Int b when b <> 0 -> Int (a / b)
-| Div, Int _, Int 0 -> failwith "division by zero"
-| _ -> failwith "precondition violated"
+  | Add, Int a, Int b -> Int (a + b)
+  | Sub, Int a, Int b -> Int (a - b)
+  | Mul, Int a, Int b -> Int (a * b)
+  | Div, Int a, Int b when b <> 0 -> Int (a / b)
+  | Div, Int _, Int 0 -> failwith "Division by zero"
+  | _ -> failwith "Operator and operand type mismatch"
 
 
 (* fully evaluate [e] to a value [v] *)
@@ -60,9 +60,24 @@ let rec eval (e : expr) : expr =
 
 
 (* interpret [s] by lexing -> parsing -> evaluating and converting the result to a string *)
-let interp ( s : string ) : string = 
+let interp (s : string) : string = 
   s |> parse |> eval |> string_of_expr
 
+
+let rec eval_big (e : expr) : expr = match e with
+  | Int _ -> e
+  | Binop (binop, e1, e2) -> eval_bop binop e1 e2
+
+and eval_bop binop e1 e2 = match binop, eval_big e1, eval_big e2 with
+  | Add, Int a, Int b -> Int (a + b)
+  | Sub, Int a, Int b -> Int (a - b)
+  | Mul, Int a, Int b -> Int (a * b)
+  | Div, Int a, Int b when b <> 0 -> Int (a / b)
+  | Div, Int _, Int 0 -> failwith "Division by zero"
+  | _ -> failwith "Operator and operand type mismatch"
+
+let interp_big (s : string) : string = 
+  s |> parse |> eval_big |> string_of_expr
   
 let () =
   let filename = "test/math_test2.in" in
@@ -72,6 +87,9 @@ let () =
 
   let res = interp file_content in
   Printf.printf "Result of interpreting %s:\n%s\n\n" filename res;
+
+  let res = interp_big file_content in
+  Printf.printf "Result of interpreting %s with big-step model:\n%s\n\n" filename res;
 
   let ast = parse file_content in 
   Printf.printf "AST: %s\n" (string_of_expr ast);

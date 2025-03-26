@@ -1,0 +1,6 @@
+(executable
+ (public_name interpreter_project)
+ (name main)
+ (modules main)
+ (libraries mathlib)
+ (flags (:standard -w -32-27-26-39)))

@@ -4,6 +4,14 @@ open Ast
 let rec string_of_expr (e : expr) : string = 
   match e with
   | Int n -> Printf.sprintf "Int %d" n
+  | Var id -> Printf.sprintf "Var %s" id
+  | Bool b -> 
+    let b_str = 
+      match b with 
+      | true -> "true"
+      | false -> "false"
+    in
+    Printf.sprintf "Bool %s" b_str
   | Binop (binop, e1, e2) ->
     let binop_str = 
       match binop with 
@@ -11,8 +19,11 @@ let rec string_of_expr (e : expr) : string =
       | Mul -> "Mul"
       | Sub -> "Sub"
       | Div -> "Div"
+      | Leq -> "Leq"
     in
     Printf.sprintf "Binop (%s, %s, %s)" binop_str (string_of_expr e1) (string_of_expr e2)
+  | Let (var, e1, e2) -> Printf.sprintf "Let (%s, %s, %s)" var (string_of_expr e1) (string_of_expr e2)
+  | If (e1, e2, e3) -> Printf.sprintf "If (%s, %s, %s)" (string_of_expr e1) (string_of_expr e2) (string_of_expr e3)
 
 
 let parse s : expr =

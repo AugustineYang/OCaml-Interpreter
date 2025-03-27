@@ -38,9 +38,19 @@ let is_value : expr -> bool = function
   | Var _ | Binop _ | If _ | Let _ -> false
 
 
-(** [subst e v x] is [e{v/x}]. *)
-let subst _ _ _ =
-  failwith "TODO: implement substitution"
+(** [subst e v x] is [e] with [v] substituted for [x], that
+    is, [e{v/x}]. *)
+let rec subst e v x = match e with
+  | Var y -> if x = y then v else e
+  | Bool _ -> e
+  | Int _ -> e
+  | Binop (binop, e1, e2) -> Binop (binop, subst e1 v x, subst e2 v x)
+  | If (e1, e2, e3) -> If (subst e1 v x, subst e2 v x, subst e3 v x)
+  | Let (y, e1, e2) ->
+    let e1' = subst e1 v x in
+    if x = y
+    then Let (y, e1', e2)
+    else Let (y, e1', subst e2 v x)
 
 
 (* takes a single step of evaluation of [e] *)

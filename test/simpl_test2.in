@@ -1,1 +1,1 @@
-if 2 <= 3 then 7 else true
+let y = 6 in let x = 5 * 6 in if x <= 30 - y then x - 1 else y + 1

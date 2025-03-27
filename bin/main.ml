@@ -35,12 +35,19 @@ let parse s : expr =
 (* check if an expression is a value (i.e., fully evaluated) *)
 let is_value : expr -> bool = function
   | Int _ | Bool _ -> true
-  | Binop _ | If _ | _ -> false
+  | Var _ | Binop _ | If _ | Let _ -> false
+
+
+(** [subst e v x] is [e{v/x}]. *)
+let subst _ _ _ =
+  failwith "TODO: implement substitution"
 
 
 (* takes a single step of evaluation of [e] *)
 let rec step : expr -> expr = function
   | Int _ | Bool _ -> failwith "Does not step on a number"
+
+  | Var _ -> failwith "Unbound variable"
 
   (* No need for further stepping if both sides are already values *)
   | Binop (binop, e1, e2) when is_value e1 && is_value e2 -> 
@@ -60,7 +67,9 @@ let rec step : expr -> expr = function
 
   | If (e1, e2, e3) -> If (step e1, e2, e3)
 
-  | _ -> failwith "Not Implemented"
+  | Let (x, e1, e2) when is_value e1 -> subst e2 e1 x
+
+  | Let (x, e1, e2) -> Let (x, step e1, e2)
 
 
 (* implement the primitive operation [v1 binop v2].
@@ -88,7 +97,9 @@ let interp (s : string) : string =
 
 let rec eval_big (e : expr) : expr = match e with
   | Int _ | Bool _ -> e
+  | Var _ -> failwith "Unbound variable"
   | Binop (binop, e1, e2) -> eval_bop binop e1 e2
+  | Let (x, e1, e2) -> subst e2 (eval_big e1) x |> eval_big
   | If (e1, e2, e3) -> eval_if e1 e2 e3
 
 and eval_bop binop e1 e2 = match binop, eval_big e1, eval_big e2 with
@@ -110,8 +121,8 @@ let interp_big (s : string) : string =
   s |> parse |> eval_big |> string_of_expr
   
 let () =
-  (* let filename = "test/simpl_test1.in" in *)
-  let filename = "test/simpl_test2.in" in
+  let filename = "test/simpl_test1.in" in
+  (* let filename = "test/simpl_test2.in" in *)
   let in_channel = open_in filename in
   let file_content = really_input_string in_channel (in_channel_length in_channel) in
   close_in in_channel;

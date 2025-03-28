@@ -3,4 +3,4 @@
  (name main)
  (modules main)
  (libraries interpreterlib)
- (flags (:standard -w -32-27-26-39-8)))
+ (flags (:standard -w -32-27-26-39-8-37)))
